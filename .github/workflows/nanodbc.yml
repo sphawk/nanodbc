@@ -1,15 +1,31 @@
 name: nanodbc
 
-on: [push]
-
-env:
-  BUILD_TYPE: Release
+on: 
+  push:
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   build:
-    runs-on: [windows-latest, macos-latest, ubuntu-latest]
+    name: ${{matrix.buildname}}
+    runs-on: ${{matrix.os}}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            buildname: 'ubuntu'
+          - os: windows-latest
+            buildname: 'windows'
+          - os: macos-latest
+            buildname: 'macos'
+    env:
+      BUILD_TYPE: Release
     steps:
     - uses: actions/checkout@v2
+      with:
+        submodules: true
+        fetch-depth: 0
     - name: Create Build Environment
       shell: bash
       run: cmake -E make_directory ${{github.workspace}}/build
