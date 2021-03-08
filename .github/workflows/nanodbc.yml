@@ -27,17 +27,13 @@ jobs:
         submodules: true
         fetch-depth: 0
     - name: Create Build Environment
-      shell: bash
       run: cmake -E make_directory ${{github.workspace}}/build
     - name: Configure CMake
       working-directory: ${{github.workspace}}/build
-      shell: bash
       run: cmake ${{github.workspace}} -DCMAKE_BUILD_TYPE=$BUILD_TYPE
     - name: Build
       working-directory: ${{github.workspace}}/build
-      shell: bash
       run: cmake --build . --config $BUILD_TYPE
     - name: Test
       working-directory: ${{github.workspace}}/build
-      shell: bash
       run: ctest -C $BUILD_TYPE
